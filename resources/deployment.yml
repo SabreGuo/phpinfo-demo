@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: phpinfo-demo
+  namespace: guoshaobo
+spec:
+  selector:
+    matchLabels:
+      app: phpinfo-demo
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: phpinfo-demo
+    spec:
+      containers:
+      - name: php
+        image: registry.cn-shanghai.aliyuncs.com/demo-sh/php:7.3.318 # {"$imagepolicy": "guoshaobo:php"}
+        ports:
+        - containerPort: 9000
+        volumeMounts:
+        - name: www-conf
+          mountPath: /etc/opt/remi/php73/php-fpm.d
+        - name: phpinfo-php
+          mountPath: /var/www
+      - name: nginx
+        image: registry.cn-shanghai.aliyuncs.com/demo-sh/nginx:1.25.18 # {"$imagepolicy": "guoshaobo:nginx"}
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: phpinfo-conf
+          mountPath: /etc/nginx/conf.d
+        - name: phpinfo-php
+          mountPath: /var/www
+      volumes:
+      - name: phpinfo-php
+        configMap:
+          name: phpinfo-php
+      - name: www-conf
+        configMap:
+          name: www-conf
+      - name: phpinfo-conf
+        configMap:
+          name: phpinfo-conf
+      imagePullSecrets:
+      - name: regcred

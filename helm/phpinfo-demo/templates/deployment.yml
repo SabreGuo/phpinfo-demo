@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "phpinfo-demo.fullname" . }}
+spec:
+  selector:
+    matchLabels:
+      app: phpinfo-demo
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: phpinfo-demo
+    spec:
+      containers:
+      - name: php
+        image: {{ .Values.image.php.Repository }}:{{ .Values.image.php.tag }}
+        volumeMounts:
+        - name: {{ .Values.volumeMount.wwwConf.name }}
+          mountPath: {{ .Values.volumeMount.wwwConf.mountPath }}
+        - name: {{ .Values.volumeMount.phpInfoPhp.name }}
+          mountPath: {{ .Values.volumeMount.phpInfoPhp.mountPath }}
+      - name: nginx
+        image: {{ .Values.image.nginx.Repository }}:{{ .Values.image.nginx.tag }}
+        ports:
+        - containerPort: {{ .Values.containerPort }}
+        volumeMounts:
+        - name: {{ .Values.volumeMount.phpInfoConf.name }}
+          mountPath: {{ .Values.volumeMount.phpInfoConf.mountPath }}
+        - name: {{ .Values.volumeMount.phpInfoPhp.name }}
+          mountPath: {{ .Values.volumeMount.phpInfoPhp.mountPath }}
+      volumes:
+      - name: {{ .Values.volumeMount.phpInfoPhp.name }} 
+        configMap:
+          name: {{ .Values.volumeMount.phpInfoPhp.name }}
+      - name: {{ .Values.volumeMount.wwwConf.name }}
+        configMap:
+          name: {{ .Values.volumeMount.wwwConf.name }}
+      - name:  {{ .Values.volumeMount.phpInfoConf.name }}
+        configMap:
+          name: {{ .Values.volumeMount.phpInfoConf.name }}
+      imagePullSecrets:  
+      - name: {{ .Values.imagePullSecrets }}

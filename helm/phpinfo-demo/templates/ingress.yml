@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "phpinfo-demo.fullname" . }}
+spec:
+  rules:
+  - host: {{ .Values.ingress.phpInfoDemo.host }}
+    http:
+      paths:
+      - pathType: Prefix
+        path: {{ .Values.ingress.phpInfoDemo.path }}
+        backend:
+          service:
+            name: {{ include "phpinfo-demo.fullname" . }}
+            port:
+              number: {{ .Values.ingress.phpInfoDemo.port }}

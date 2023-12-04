@@ -1,0 +1,11 @@
+apiVersion: image.toolkit.fluxcd.io/v1beta1
+kind: ImagePolicy
+metadata:
+  name: nginx
+  namespace: guoshaobo
+spec:
+  imageRepositoryRef:
+    name: nginx
+  policy:
+    semver:
+      range: ">=1.0.0"

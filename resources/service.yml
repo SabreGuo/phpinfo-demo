@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: phpinfo-demo
+  namespace: guoshaobo
+spec:
+  selector:
+    app: phpinfo-demo
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

@@ -1,0 +1,25 @@
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta1
+kind: ImageUpdateAutomation
+metadata:
+  name: phpinfo-demo
+  namespace: guoshaobo
+spec:
+  git:
+    checkout:
+      ref:
+        branch: master
+    commit:
+      author:
+        email: fluxcdbot@youdianzhishi.com
+        name: fluxcdbot
+      messageTemplate: '{{range .Updated.Images}}{{println .}}{{end}}'
+    push:
+      branch: master
+  interval: 1m0s
+  sourceRef:
+    kind: GitRepository
+    name: phpinfo-demo
+  update:
+    path: ./helm/phpinfo-demo/values.yaml
+    strategy: Setters

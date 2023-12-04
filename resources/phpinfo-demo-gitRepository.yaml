@@ -1,0 +1,13 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: GitRepository
+metadata:
+  name: phpinfo-demo
+  namespace: guoshaobo
+spec:
+  interval: 5m0s
+  url: ssh://git@47.101.174.187:10022/guoshaobo/phpinfo_demo.git
+  ref:
+    branch: master
+  secretRef:
+    name: phpinfo-demo

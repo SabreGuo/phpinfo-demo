@@ -1,0 +1,19 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: phpinfo-demo 
+  namespace: guoshaobo
+spec:
+  chart:
+    spec:
+      chart: ./helm/phpinfo-demo
+      interval: 1m
+      reconcileStrategy: Revision
+      sourceRef:
+        kind: GitRepository
+        name: phpinfo-demo
+        namespace: guoshaobo
+      valuesFiles:
+      - values.yaml
+      version: '*'
+  interval: 10s
